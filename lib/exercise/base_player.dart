@@ -34,10 +34,12 @@ abstract class BasePlayer {
     do {
       var next = nextNote();
       var delay = next.item2;
-      //- (duration.elapsedMilliseconds - previousDelay);
+      if (previousDelay != 0) {
+        //    delay -= (duration.elapsedMilliseconds - previousDelay);
+      }
+      duration.reset();
+      previousDelay = next.item2;
       if (next.item1.asset.isNotEmpty) {
-        duration.reset();
-        previousDelay = next.item2;
         _pool.play(_soundIds[next.item1]!);
       }
       //   yield next.item1;

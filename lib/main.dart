@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:spritewidget/spritewidget.dart';
 import 'package:stick_control/exercise/exercise.dart';
 import 'package:stick_control/exercise/exercise_library.dart';
 import 'package:stick_control/exercise/exercise_player.dart';
+import 'package:stick_control/render/note_render.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,15 +39,25 @@ class _MyHomePageState extends State<MyHomePage> {
   double _currentBpm = 100.0;
   Exercise? selectedExercise;
   late ExerciseLibrary library;
+  NoteRender noteRender = NoteRender();
   List<DropdownMenuEntry<Exercise>> _exerciseEntries = [];
 
   @override
   void initState() {
     super.initState();
     library = ExerciseLibrary();
-    library.load().whenComplete(() => _exerciseEntries = library.exercises
-        .map((e) => DropdownMenuEntry(value: e, label: e.name))
-        .toList());
+    _load();
+  }
+
+  void _load() async {
+    await Future.wait([library.load(), noteRender.load()]);
+    print("loaded assets");
+    setState(() {
+      _exerciseEntries = library.exercises
+          .map((e) => DropdownMenuEntry(value: e, label: e.name))
+          .toList();
+      _selectExercise(library.exercises[0]);
+    });
   }
 
   void _start() {
@@ -74,6 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
       selectedExercise = e;
     });
     _stop();
+    noteRender.init(e!);
   }
 
   @override
@@ -84,27 +97,33 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            DropdownMenu(
-              width: 300,
-              label: const Text("Exercise"),
-              dropdownMenuEntries: _exerciseEntries,
-              onSelected: _selectExercise,
-            ),
-            Text(
-              '${_currentBpm.round()} BPM',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            Slider(
-                value: _currentBpm, min: 10, max: 300, onChanged: _changeBpm),
-            IconButton(onPressed: _start, icon: const Icon(Icons.play_arrow)),
-            IconButton(onPressed: _stop, icon: const Icon(Icons.stop))
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              DropdownMenu(
+                width: 300,
+                label: const Text("Exercise"),
+                dropdownMenuEntries: _exerciseEntries,
+                onSelected: _selectExercise,
+              ),
+              Expanded(
+                  child: Padding(
+                      padding: const EdgeInsets.fromLTRB(100, 150, 100, 150),
+                      child: SpriteWidget(noteRender))),
+              Text(
+                '${_currentBpm.round()} BPM',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              Slider(
+                  value: _currentBpm, min: 10, max: 300, onChanged: _changeBpm),
+              IconButton(onPressed: _start, icon: const Icon(Icons.play_arrow)),
+              IconButton(onPressed: _stop, icon: const Icon(Icons.stop))
+            ],
+          ),
         ),
       ),
-
       // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

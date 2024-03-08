@@ -20,9 +20,6 @@ class ExercisePlayer extends BasePlayer {
 
   double calcNoteDuration(Note note) {
     var delay = _exercise.timeSignature.calcNoteDuration(bpm);
-    if (note.count > 2) {
-      delay *= 2 / note.count;
-    }
-    return delay * 16 / note.value;
+    return note.calcLength(delay);
   }
 }

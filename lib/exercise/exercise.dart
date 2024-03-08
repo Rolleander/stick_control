@@ -77,4 +77,11 @@ class Note {
   _parseSticking(String code) {
     sticking = Sticking.values.firstWhere((it) => it.code == code);
   }
+
+  calcLength(double base) {
+    if (count > 2) {
+      base *= 2 / count;
+    }
+    return base * 16 / value;
+  }
 }
