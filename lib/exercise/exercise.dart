@@ -6,24 +6,33 @@ class Exercise {
   late String name;
   late TimeSignature timeSignature;
   late List<Note> notes;
+  double length = 0;
 
   Exercise(String json) {
     Map data = jsonDecode(json);
     name = data['name'];
     timeSignature = TimeSignature(data['time']);
     notes = (data['notes'] as List).map((note) => Note(note)).toList();
+    for (var note in notes) {
+      length += note.calcLength(1);
+    }
+  }
+
+  double calcNoteLength(Note note, int bpm) {
+    var delay = timeSignature.calcNoteDuration(bpm);
+    return note.calcLength(delay);
   }
 }
 
 enum NoteType {
   pause("P", ""),
-  accent("A", "rimshot.wav"),
-  standard("", "standard.wav"),
-  ghost("G", "ghost.wav"),
+  accent("A", "rimshot"),
+  standard("", "standard"),
+  ghost("G", "ghost"),
   roll("R", ""),
   flam("F", ""),
-  clickAccent("", "click.wav"),
-  click("", "rim.wav");
+  clickAccent("", "click"),
+  click("", "rim");
 
   const NoteType(this.code, this.asset);
 
@@ -59,6 +68,10 @@ class Note {
     }
   }
 
+  odd() {
+    return count > 2;
+  }
+
   _parseValueAndCount(String data) {
     if (data.contains("-")) {
       var parts = data.split("-");
@@ -80,8 +93,25 @@ class Note {
 
   calcLength(double base) {
     if (count > 2) {
-      base *= 2 / count;
+      base *= calcCommonGround(count) / count;
     }
     return base * 16 / value;
+  }
+
+  calcCommonGround(int oddCount) {
+    var common = 2;
+    do {
+      if (common * 2 > oddCount) {
+        return common;
+      }
+      common *= 2;
+    } while (true);
+  }
+
+  calcBaseLength(double base) {
+    if (count > 2) {
+      base *= 2 / count;
+    }
+    return base * 16;
   }
 }

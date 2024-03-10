@@ -1,29 +1,45 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/services.dart';
 import 'package:soundpool/soundpool.dart';
 
-class SamplePlayer {
-  static const count = 10;
-  var _current = 0;
-  final List<AudioPlayer> _players = [];
-  final _pool =
-      Soundpool.fromOptions(options: const SoundpoolOptions(maxStreams: 10));
+import 'exercise.dart';
 
-  init(String asset) async {
-    for (var i = 0; i < count; i++) {
-      var player = AudioPlayer();
-      player.setSourceAsset("samples/$asset");
-      player.setReleaseMode(ReleaseMode.stop);
-      player.setPlayerMode(PlayerMode.lowLatency);
-      _players.add(player);
+class SamplePlayer {
+  final _soundIds = <NoteType, int>{};
+  Soundpool? _pool;
+
+  Future<void> load() async {
+    if (kIsWeb) {
+      _pool = Soundpool.fromOptions(
+          options: const SoundpoolOptions(
+              maxStreams: 10, streamType: StreamType.ring));
+    } else {}
+    /* _ogg = FlutterOggPiano();
+      await _ogg!.init();*/
+    if (kIsWeb) {
+      var count = 0;
+      for (var noteType in NoteType.values) {
+        if (noteType.asset.isNotEmpty) {
+          _soundIds[noteType] = await rootBundle
+              .load("assets/samples/${noteType.asset}.ogg")
+              .then((ByteData soundData) {
+            return _pool!.load(soundData);
+          });
+        }
+      }
     }
   }
 
-  play() {
-    _players[_current].stop();
-    _players[_current].resume();
-    _current++;
-    if (_current >= count) {
-      _current = 0;
-    }
+  /*  count++;
+            return _ogg!
+                .load(
+                    src: soundData, name: "${noteType.asset}.ogg", index: count)
+                .then((value) => count);
+          }*/
+
+  play(NoteType type) {
+    if (_pool != null) {
+      _pool!.play(_soundIds[type]!);
+    } else {}
   }
 }

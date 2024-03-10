@@ -3,7 +3,7 @@ import 'package:spritewidget/spritewidget.dart';
 import 'package:stick_control/exercise/exercise.dart';
 import 'package:stick_control/exercise/exercise_library.dart';
 import 'package:stick_control/exercise/exercise_player.dart';
-import 'package:stick_control/render/note_render.dart';
+import 'package:stick_control/render/exercise_render.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,12 +35,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  ExercisePlayer? player;
+  ExercisePlayer player = ExercisePlayer();
   double _currentBpm = 100.0;
   Exercise? selectedExercise;
   late ExerciseLibrary library;
-  NoteRender noteRender = NoteRender();
+  late ExerciseRender noteRender;
   List<DropdownMenuEntry<Exercise>> _exerciseEntries = [];
+
+  _MyHomePageState() {
+    noteRender = ExerciseRender(player);
+  }
 
   @override
   void initState() {
@@ -50,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _load() async {
-    await Future.wait([library.load(), noteRender.load()]);
+    await Future.wait([library.load(), noteRender.load(), player.load()]);
     print("loaded assets");
     setState(() {
       _exerciseEntries = library.exercises
@@ -61,24 +65,21 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _start() {
-    _stop();
     if (selectedExercise == null) {
       return;
     }
-    player = ExercisePlayer(selectedExercise!);
-    player!.bpm = _currentBpm.round();
-    player!.init().whenComplete(() => player?.play());
+    player.play();
   }
 
   void _stop() {
-    player?.stop();
+    player.stop();
   }
 
   void _changeBpm(double value) {
     setState(() {
       _currentBpm = value;
     });
-    player?.bpm = _currentBpm.round();
+    player.bpm = _currentBpm.round();
   }
 
   void _selectExercise(Exercise? e) {
@@ -86,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
       selectedExercise = e;
     });
     _stop();
+    player.init(e!);
     noteRender.init(e!);
   }
 

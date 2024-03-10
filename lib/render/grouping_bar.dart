@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:spritewidget/spritewidget.dart';
 
-class NoteBar extends Node {
+class GroupingBar extends Node {
   Paint p = Paint();
   static const black = Color.fromARGB(255, 0, 0, 0);
+  static const b = 2.0;
 
-  NoteBar(this.length, this.text) {
+  GroupingBar(this.length, this.text) {
     p.style = PaintingStyle.fill;
     p.color = black;
   }
@@ -15,16 +16,17 @@ class NoteBar extends Node {
 
   @override
   void paint(Canvas canvas) {
-    const root = Offset(4, -56);
-    canvas.drawRect(Rect.fromPoints(root, root.translate(length + 4, 5)), p);
-
-    if (text == null) {
-      return;
-    }
+    const root = Offset(4, -145);
+    canvas.drawRect(Rect.fromPoints(root, root.translate(length + 4, b)), p);
+    canvas.drawRect(Rect.fromPoints(root, root.translate(b, 30)), p);
+    canvas.drawRect(
+        Rect.fromPoints(
+            root.translate(length + 4 - b, 0), root.translate(length + 4, 30)),
+        p);
     var span =
         TextSpan(text: text, style: TextStyle(color: black, fontSize: 40));
     var painter = TextPainter(text: span, textDirection: TextDirection.ltr);
     painter.layout();
-    painter.paint(canvas, Offset(length / 2 - 5, -150));
+    painter.paint(canvas, Offset(length / 2 + 5, -195));
   }
 }

@@ -26,7 +26,9 @@ android {
     namespace "com.broll.stick_control"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
-
+    buildFeatures {
+        prefab true
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -49,6 +51,12 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_STL=c++_shared"
+                cppFlags ''
+            }
+        }
     }
 
     buildTypes {
@@ -58,10 +66,19 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.22.1'
+        }
+    }
 }
 
 flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    implementation 'com.google.oboe:oboe:1.8.1'
+}
