@@ -1,11 +1,13 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
 import 'package:soundpool/soundpool.dart';
+import 'package:stick_control/exercise/oboe_player.dart';
 
 import 'exercise.dart';
 
 class SamplePlayer {
   final _soundIds = <NoteType, int>{};
+  OboePlayer? _oboe;
   Soundpool? _pool;
 
   Future<void> load() async {
@@ -13,33 +15,30 @@ class SamplePlayer {
       _pool = Soundpool.fromOptions(
           options: const SoundpoolOptions(
               maxStreams: 10, streamType: StreamType.ring));
-    } else {}
-    /* _ogg = FlutterOggPiano();
-      await _ogg!.init();*/
-    if (kIsWeb) {
-      var count = 0;
-      for (var noteType in NoteType.values) {
-        if (noteType.asset.isNotEmpty) {
-          _soundIds[noteType] = await rootBundle
-              .load("assets/samples/${noteType.asset}.ogg")
-              .then((ByteData soundData) {
+    } else {
+      _oboe = OboePlayer();
+      await _oboe!.init();
+    }
+    for (var noteType in NoteType.values) {
+      if (noteType.asset.isNotEmpty) {
+        _soundIds[noteType] = await rootBundle
+            .load("assets/samples/${noteType.asset}.ogg")
+            .then((ByteData soundData) {
+          if (kIsWeb) {
             return _pool!.load(soundData);
-          });
-        }
+          } else {
+            return _oboe!.load(soundData, noteType.asset);
+          }
+        });
       }
     }
   }
 
-  /*  count++;
-            return _ogg!
-                .load(
-                    src: soundData, name: "${noteType.asset}.ogg", index: count)
-                .then((value) => count);
-          }*/
-
   play(NoteType type) {
     if (_pool != null) {
       _pool!.play(_soundIds[type]!);
-    } else {}
+    } else {
+      _oboe!.play(_soundIds[type]!);
+    }
   }
 }

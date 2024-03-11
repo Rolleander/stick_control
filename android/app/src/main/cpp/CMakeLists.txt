@@ -27,7 +27,9 @@ project("stick_control")
 # used in the AndroidManifest.xml file.
 add_library(${CMAKE_PROJECT_NAME} SHARED
         # List C/C++ source files with relative paths to this CMakeLists.txt.
-        oboe_player.cpp, oboe_player.h)
+        OboeInterface.cpp
+        OboeEngine.cpp
+        OboePlayer.cpp)
 
 # Find the Oboe package
 find_package(oboe REQUIRED CONFIG)

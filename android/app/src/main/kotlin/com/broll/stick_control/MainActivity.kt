@@ -1,11 +1,8 @@
 package com.broll.stick_control
 
-import android.media.MediaCodec
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 
 class MainActivity : FlutterActivity() {
 
