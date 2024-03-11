@@ -55,7 +55,7 @@ OboeEngine::onAudioReady(AudioStream *audioStream, void *audioData, int32_t numF
 
 int OboeEngine::addPlayer(std::vector<float> data) {
     int index = players.size();
-    players.at(index) = OboePlayer(std::move(data));
+    players.emplace_back(std::move(data));
     return index;
 }
 

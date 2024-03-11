@@ -10,6 +10,10 @@ class MainActivity : FlutterActivity() {
 
     private val oboe = OboePlayer()
 
+    init {
+        System.loadLibrary("stick_control")
+    }
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(
@@ -19,7 +23,7 @@ class MainActivity : FlutterActivity() {
             when (call.method) {
                 "init" -> oboe.init().also { result.success(null) }
                 "play" -> oboe.play(call.argument<Int>("id")!!)
-                "load" -> oboe.load(result,call.argument<String>("path")!! )
+                "load" -> oboe.load(result, call.argument<String>("path")!!)
                 else -> result.notImplemented()
             }
         }
