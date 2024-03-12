@@ -60,7 +60,6 @@ class _MyHomePageState extends State<MyHomePage> {
       _exerciseEntries = library.exercises
           .map((e) => DropdownMenuEntry(value: e, label: e.name))
           .toList();
-      _selectExercise(library.exercises[0]);
     });
   }
 
@@ -91,42 +90,61 @@ class _MyHomePageState extends State<MyHomePage> {
     noteRender.init(e!);
   }
 
+  void _refreshPlayerRender() {
+    if (selectedExercise != null) {
+      print("rerender player");
+      noteRender.init(selectedExercise!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    noteRender.context = context;
+    _refreshPlayerRender();
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              DropdownMenu(
-                width: 300,
-                label: const Text("Exercise"),
-                dropdownMenuEntries: _exerciseEntries,
-                onSelected: _selectExercise,
-              ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    DropdownMenu(
+                      width: 300,
+                      label: const Text("Exercise"),
+                      dropdownMenuEntries: _exerciseEntries,
+                      onSelected: _selectExercise,
+                    )
+                  ]),
               Expanded(
                   child: Padding(
-                      padding: const EdgeInsets.fromLTRB(100, 150, 100, 150),
-                      child: SpriteWidget(noteRender))),
-              Text(
-                '${_currentBpm.round()} BPM',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              Slider(
-                  value: _currentBpm, min: 10, max: 300, onChanged: _changeBpm),
-              IconButton(onPressed: _start, icon: const Icon(Icons.play_arrow)),
-              IconButton(onPressed: _stop, icon: const Icon(Icons.stop))
+                      padding: const EdgeInsets.fromLTRB(50, 150, 50, 200),
+                      child: SpriteWidget(
+                        noteRender,
+                        transformMode: SpriteBoxTransformMode.fixedWidth,
+                      ))),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      '${_currentBpm.round()} BPM',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    Slider(
+                        value: _currentBpm,
+                        min: 10,
+                        max: 300,
+                        onChanged: _changeBpm),
+                    IconButton(
+                        onPressed: _start, icon: const Icon(Icons.play_arrow)),
+                    IconButton(onPressed: _stop, icon: const Icon(Icons.stop))
+                  ]),
             ],
           ),
         ),
       ),
-      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

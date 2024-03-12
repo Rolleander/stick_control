@@ -3,11 +3,13 @@ class TimeSignature {
   static const millisPerSecond = 1000;
   late int count;
   late int note;
+  late double length;
 
   TimeSignature(String signature) {
     final splitted = signature.split('/');
     count = int.parse(splitted[0]);
     note = int.parse(splitted[1]);
+    length = count * 16 * (1.0 / note);
   }
 
   double calcNoteDuration(int bpm) {
