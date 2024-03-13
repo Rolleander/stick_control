@@ -83,7 +83,6 @@ class ExercisePlayer {
     var fixedDelay = delay;
     if (_targetDuration > 0) {
       var fix = _targetDuration - _stopwatch.elapsedMilliseconds;
-      print("sleep fix: ${fix.round()} ");
       fixedDelay += fix;
     }
     _targetDuration += delay;
@@ -96,12 +95,12 @@ class ExercisePlayer {
     }
   }
 
-  double getProgress() {
-    return getNoteProgress() / length;
-  }
-
   double getNoteProgress() {
-    return _progress + _sleeper.getProgress() * _currentSleepTarget;
+    var l = (_progress + _sleeper.getProgress() * _currentSleepTarget);
+    if (l == 0) {
+      return l;
+    }
+    return l % length;
   }
 
   void stop() {

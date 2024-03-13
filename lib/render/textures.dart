@@ -19,6 +19,7 @@ class Textures {
       "pause_16th",
       "pause_32th",
       "accent",
+      "ghost"
     ].map((e) => "assets/sprites/$e.png").toList());
   }
 }

@@ -16,7 +16,7 @@ class NoteBar extends Node {
   @override
   void paint(Canvas canvas) {
     const root = Offset(4, -56);
-    canvas.drawRect(Rect.fromPoints(root, root.translate(length + 4, 5)), p);
+    canvas.drawRect(Rect.fromPoints(root, root.translate(length + 4, 15)), p);
 
     if (text == null) {
       return;

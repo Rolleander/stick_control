@@ -70,8 +70,8 @@ class ExerciseRender extends NodeWithSize {
         rows++;
       }
     } while (noteIndex < e.notes.length - 1);
-    this.size = Size(maxWidth - 100, screenSize.height - 200);
-    this.spriteBox!.markNeedsLayout();
+    size = Size(maxWidth - 100, screenSize.height - 200);
+    spriteBox!.markNeedsLayout();
   }
 
   @override
@@ -88,7 +88,7 @@ class ExerciseRender extends NodeWithSize {
 
   updateCursor() {
     var y = startY;
-    var x = startX - 40.0;
+    var x = startX - 60.0;
     var l = player.getNoteProgress() * space;
     var d = l % maxWidth;
     x += d;

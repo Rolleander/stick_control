@@ -38,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ExercisePlayer player = ExercisePlayer();
   double _currentBpm = 100.0;
   Exercise? selectedExercise;
+  var playing = false;
   late ExerciseLibrary library;
   late ExerciseRender noteRender;
   List<DropdownMenuEntry<Exercise>> _exerciseEntries = [];
@@ -63,15 +64,18 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _start() {
+  void _togglePlayer() {
     if (selectedExercise == null) {
       return;
     }
-    player.play();
-  }
-
-  void _stop() {
-    player.stop();
+    setState(() {
+      playing = !playing;
+    });
+    if (playing) {
+      player.play();
+    } else {
+      player.stop();
+    }
   }
 
   void _changeBpm(double value) {
@@ -84,8 +88,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void _selectExercise(Exercise? e) {
     setState(() {
       selectedExercise = e;
+      playing = false;
     });
-    _stop();
+    player.stop();
     player.init(e!);
     noteRender.init(e!);
   }
@@ -137,9 +142,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         min: 10,
                         max: 300,
                         onChanged: _changeBpm),
-                    IconButton(
-                        onPressed: _start, icon: const Icon(Icons.play_arrow)),
-                    IconButton(onPressed: _stop, icon: const Icon(Icons.stop))
+                    FloatingActionButton(
+                        onPressed: _togglePlayer,
+                        child: Icon(!playing ? Icons.play_arrow : Icons.stop)),
                   ]),
             ],
           ),

@@ -36,14 +36,14 @@ class BeatRender {
       var sprite = _getImage(note, next);
       var noteSpace = note.calcLength(space);
       if (note.odd() && sameCount == 0) {
+        oddGroupingLength += noteSpace;
         if ((next == null ||
                 next.count != note.count ||
-                oddGroupingLength >= note.calcBaseLength(space)) &&
+                oddGroupingLength > note.calcBaseLength(space) / 2) &&
             oddGroupingLength > 0) {
+          oddGroupingLength -= noteSpace;
           connectOddGroup(x, note.count.toString());
           oddGroupingLength = 0;
-        } else {
-          oddGroupingLength += noteSpace;
         }
       } else {
         oddGroupingLength = 0;
@@ -58,13 +58,19 @@ class BeatRender {
         accent.position = Offset(x, y - 85);
         accent.scale = 0.7;
         nodes.add(accent);
+      } else if (note.type == NoteType.ghost) {
+        var ghost = Sprite.fromImage(
+            textures.images.getImage("assets/sprites/ghost.png")!);
+        ghost.position = Offset(x, y - 12);
+        ghost.scale = 1.2;
+        nodes.add(ghost);
       }
       sprite.position = Offset(x, y);
       x += noteSpace;
       nodes.add(sprite);
       notes.add(sprite);
       length += noteSpace;
-      if (length >= beatLength) {
+      if (length.round() >= beatLength) {
         break;
       }
     }
@@ -73,9 +79,17 @@ class BeatRender {
 
   void connectLastNotes(double x, Note note, double noteSpace) {
     var w = (sameCount - 1) * noteSpace;
-    var noteBar = NoteBar(w, note.odd() ? note.count.toString() : null);
-    noteBar.position = Offset(x - w, y);
-    nodes.add(noteBar);
+    var bars = 1;
+    if (note.value == 16) {
+      bars = 2;
+    } else if (note.value == 32) {
+      bars = 3;
+    }
+    for (var i = 0; i < bars; i++) {
+      var noteBar = NoteBar(w, note.odd() ? note.count.toString() : null);
+      noteBar.position = Offset(x - w, y + i * 25);
+      nodes.add(noteBar);
+    }
   }
 
   void connectOddGroup(double x, String title) {

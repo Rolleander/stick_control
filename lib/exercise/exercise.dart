@@ -110,7 +110,7 @@ class Note {
 
   calcBaseLength(double base) {
     if (count > 2) {
-      base *= 2 / count;
+      base *= calcCommonGround(count) / count;
     }
     return base * 16;
   }
