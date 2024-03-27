@@ -11,8 +11,9 @@ import 'package:stick_control/render/textures.dart';
 const space = 60.0;
 
 class ExerciseRender extends NodeWithSize {
-  ExerciseRender(this.player) : super(const Size(500, 300));
+  ExerciseRender(this.player, this.textures) : super(const Size(500, 300));
 
+  Textures textures;
   ExercisePlayer player;
   Exercise? exercise;
   List<Sprite> notes = [];
@@ -31,12 +32,6 @@ class ExerciseRender extends NodeWithSize {
   var zoom = 1.5;
   var cursor = PlayCursor();
   var resize = false;
-
-  Textures textures = Textures();
-
-  Future<void> load() async {
-    await textures.load();
-  }
 
   void init(Exercise e) {
     y = startY;
@@ -71,7 +66,7 @@ class ExerciseRender extends NodeWithSize {
       }
     } while (noteIndex < e.notes.length - 1);
     size = Size(maxWidth - 100, screenSize.height - 200);
-    spriteBox!.markNeedsLayout();
+    spriteBox?.markNeedsLayout();
   }
 
   @override

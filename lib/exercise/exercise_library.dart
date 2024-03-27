@@ -1,8 +1,9 @@
 import 'package:flutter/services.dart';
+import 'package:quiver/collection.dart';
 import 'package:stick_control/exercise/exercise.dart';
 
 class ExerciseLibrary {
-  List<Exercise> exercises = [];
+  Multimap<String, Exercise> exercises = Multimap();
 
   Future<void> load() async {
     final assetManifest = await AssetManifest.loadFromAssetBundle(rootBundle);
@@ -13,7 +14,8 @@ class ExerciseLibrary {
     for (var key in exList) {
       print("load " + key);
       var json = await rootBundle.loadString(key);
-      exercises.add(Exercise(json));
+      var exercise = Exercise(json);
+      exercises.add(exercise.group, exercise);
     }
   }
 }

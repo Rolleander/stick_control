@@ -4,6 +4,7 @@ import 'package:stick_control/exercise/time_signature.dart';
 
 class Exercise {
   late String name;
+  late String group;
   late TimeSignature timeSignature;
   late List<Note> notes;
   double length = 0;
@@ -11,6 +12,7 @@ class Exercise {
   Exercise(String json) {
     Map data = jsonDecode(json);
     name = data['name'];
+    group = data['group'];
     timeSignature = TimeSignature(data['time']);
     notes = (data['notes'] as List).map((note) => Note(note)).toList();
     for (var note in notes) {

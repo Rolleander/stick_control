@@ -4,7 +4,7 @@ class Textures {
   final ImageMap images = ImageMap();
   static const path = "assets/sprites/";
 
-  load() async {
+  Future<void> load() async {
     await images.load([
       "note_whole",
       "note_half",
