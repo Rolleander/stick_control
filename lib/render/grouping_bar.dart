@@ -24,7 +24,7 @@ class GroupingBar extends Node {
             root.translate(length + 4 - b, 0), root.translate(length + 4, 30)),
         p);
     var span =
-        TextSpan(text: text, style: TextStyle(color: black, fontSize: 40));
+        TextSpan(text: text, style: const TextStyle(color: black, fontSize: 40));
     var painter = TextPainter(text: span, textDirection: TextDirection.ltr);
     painter.layout();
     painter.paint(canvas, Offset(length / 2 + 5, -195));

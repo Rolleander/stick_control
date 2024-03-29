@@ -12,7 +12,7 @@ class ExerciseLibrary {
         .where((string) => string.startsWith("assets/ex/"))
         .toList();
     for (var key in exList) {
-      print("load " + key);
+      print("load $key");
       var json = await rootBundle.loadString(key);
       var exercise = Exercise(json);
       exercises.add(exercise.group, exercise);

@@ -34,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
   AppData data = AppData();
   bool loading = true;
 
-  _MyHomePageState() {}
+  _MyHomePageState();
 
   @override
   void initState() {

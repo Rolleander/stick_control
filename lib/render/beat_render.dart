@@ -131,6 +131,6 @@ class BeatRender {
     }
     endConnect = sameCount >= maxConnect;
     return Sprite.fromImage(
-        textures.images.getImage("assets/sprites/${img}.png")!);
+        textures.images.getImage("assets/sprites/$img.png")!);
   }
 }

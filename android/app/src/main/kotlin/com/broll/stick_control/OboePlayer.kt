@@ -11,7 +11,7 @@ class OboePlayer {
     external fun play(id: Int)
     external fun init()
 
-    fun load(result : MethodChannel.Result, path: String) {
+    fun load(result: MethodChannel.Result, path: String) {
         val reader = AudioReader(path)
         if (reader.canDo) {
             val resArray = reader.getPCM(MediaCodec.BufferInfo()).toByteArray()
