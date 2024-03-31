@@ -12,15 +12,13 @@ class OboePlayer {
     external fun init()
 
     fun load(result: MethodChannel.Result, path: String) {
-        val reader = AudioReader(path)
-        if (reader.canDo) {
-            val resArray = reader.getPCM(MediaCodec.BufferInfo()).toByteArray()
-            val id = load(toFloatArray(resArray))
+        try{
+            val id = load(readAudioFile(path))
             result.success(id)
-        } else {
-            result.error("FOP_SOUND_INIT_FAILURE", "Failed to initialize sound", null)
+        }catch (e: AudioReaderException){
+            result.error("FOP_SOUND_INIT_FAILURE", e.message, null)
         }
-    }
+   }
 
     private fun toFloatArray(bytes: ByteArray): FloatArray {
         val shorts = ShortArray(bytes.size / 2)
