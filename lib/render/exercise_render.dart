@@ -99,7 +99,6 @@ class ExerciseRender extends NodeWithSize {
     var lastNote = notes[player.lastNoteIndex];
     if (lastPop != lastNote) {
       lastPop = lastNote;
-      print("pops!");
       lastNote.motions.run(MotionTween<double>(
           setter: (a) => lastNote.scale = a,
           start: 1.5,
