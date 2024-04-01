@@ -46,6 +46,10 @@ class Sleeper {
     return sleepDuration - (sleepDuration * getProgress());
   }
 
+  double slept() {
+    return sleepDuration * getProgress();
+  }
+
   stop() {
     _duration = 0;
     _watch.stop();

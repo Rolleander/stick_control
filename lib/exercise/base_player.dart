@@ -40,12 +40,12 @@ abstract class BasePlayer {
     _stopwatch.stop();
   }
 
-  void changeBpm(int value) {
-    var speedup = value / bpm;
-    bpm = value;
-    _currentSleepTarget /= speedup;
+  void changeBpm(int newBpm) {
+    var prevBpm = bpm;
+    bpm = newBpm;
+    var speedup = newBpm / prevBpm;
     _targetDuration -= sleeper.sleepDuration;
-    _targetDuration += sleeper.sleepDuration / speedup;
+    _targetDuration += sleeper.slept() + sleeper.remaining() / speedup;
   }
 
   Future<void> playLoop();
