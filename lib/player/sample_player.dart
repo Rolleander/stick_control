@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
 import 'package:soundpool/soundpool.dart';
-import 'package:stick_control/exercise/oboe_player.dart';
+import 'package:stick_control/player/oboe_player.dart';
 
-import 'exercise.dart';
+import '../exercise/exercise.dart';
 
 class SamplePlayer {
   final _soundIds = <NoteType, int>{};

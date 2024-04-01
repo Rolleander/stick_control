@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:stick_control/storage/storage.dart';
 import 'package:stick_control/widgets/app_data.dart';
 import 'package:stick_control/widgets/app_wrapper.dart';
+import 'package:stick_control/widgets/exercise_widget.dart';
 import 'package:stick_control/widgets/group_selection.dart';
 
 void main() {
@@ -42,19 +44,32 @@ class _MyHomePageState extends State<MyHomePage> {
     _load();
   }
 
-  void _load() async {
+  void _openPreviousExercise() {
+    if (!data.library.exercises.containsKey(storage.config.lastGroup)) {
+      return;
+    }
+    var group = data.library.exercises[storage.config.lastGroup];
+    var exercise = group.toList()[storage.config.lastExerciseIndex];
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (ctx) => ExerciseWidget(
+                  data: data,
+                  exercise: exercise,
+                )));
+  }
+
+  Future<void> _load() async {
     await data.load();
-    print("loaded data");
     setState(() {
       loading = false;
     });
+    _openPreviousExercise();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget content;
     if (loading) {
-      content = const CircularProgressIndicator();
       return const AppWrapper(
           title: "Loading...", child: CircularProgressIndicator());
     } else {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spritewidget/spritewidget.dart';
 import 'package:stick_control/exercise/exercise.dart';
 import 'package:stick_control/render/exercise_render.dart';
+import 'package:stick_control/storage/storage.dart';
 
 import 'app_data.dart';
 import 'app_wrapper.dart';
@@ -25,10 +26,15 @@ class _ExerciseWidgetState extends State<ExerciseWidget> {
   @override
   void initState() {
     super.initState();
-    print("init state");
     _currentBpm = widget.data.bpm.value;
     noteRender = ExerciseRender(widget.data.player, widget.data.textures);
     widget.data.initExercise(widget.exercise);
+    storage.config.lastGroup = widget.exercise.group;
+    storage.config.lastExerciseIndex = widget
+        .data.library.exercises[widget.exercise.group]
+        .toList()
+        .indexOf(widget.exercise);
+    storage.updateConfig();
   }
 
   void _togglePlayer() {

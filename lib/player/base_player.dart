@@ -1,7 +1,7 @@
-import 'package:stick_control/exercise/sample_player.dart';
-import 'package:stick_control/exercise/sleeper.dart';
+import 'package:stick_control/player/sample_player.dart';
+import 'package:stick_control/player/sleeper.dart';
 
-import 'exercise.dart';
+import '../exercise/exercise.dart';
 
 abstract class BasePlayer {
   final _stopwatch = Stopwatch();

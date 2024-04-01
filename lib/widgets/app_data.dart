@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:stick_control/exercise/exercise.dart';
-import 'package:stick_control/exercise/metronome_player.dart';
-import 'package:stick_control/exercise/sample_player.dart';
+import 'package:stick_control/player/metronome_player.dart';
+import 'package:stick_control/player/sample_player.dart';
+import 'package:stick_control/storage/storage.dart';
 
 import '../exercise/exercise_library.dart';
-import '../exercise/exercise_player.dart';
+import '../player/exercise_player.dart';
 import '../render/textures.dart';
 
 class AppData {
@@ -17,6 +18,7 @@ class AppData {
 
   Future<void> load() async {
     await Future.wait([
+      storage.init(),
       library.load(),
       textures.load(),
       samplePlayer.load(),

@@ -1,6 +1,6 @@
-import 'package:stick_control/exercise/base_player.dart';
+import 'package:stick_control/player/base_player.dart';
 
-import 'exercise.dart';
+import '../exercise/exercise.dart';
 
 class MetronomePlayer extends BasePlayer {
   var clicks = 0;

@@ -1,5 +1,5 @@
-import 'package:stick_control/exercise/base_player.dart';
 import 'package:stick_control/exercise/exercise.dart';
+import 'package:stick_control/player/base_player.dart';
 
 class ExercisePlayer extends BasePlayer {
   var lastNoteIndex = -1;

@@ -3,10 +3,11 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:spritewidget/spritewidget.dart';
 import 'package:stick_control/exercise/exercise.dart';
-import 'package:stick_control/exercise/exercise_player.dart';
 import 'package:stick_control/render/beat_render.dart';
 import 'package:stick_control/render/play_cursor.dart';
 import 'package:stick_control/render/textures.dart';
+
+import '../player/exercise_player.dart';
 
 const space = 60.0;
 
